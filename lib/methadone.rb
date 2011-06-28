@@ -30,8 +30,13 @@ module Methadone
       @definitions[id] = definition_type(options[:type]).new(cls, args)
     end
   
-    def define(id, value)
-      @definitions[id] = LiteralDefinition.new(value)
+    def define(*args)
+      raise ArgumentError, "Wrong number of arguments (#{args.size} for 1 or 2)" unless args.size == 1 || args.size == 2
+      defs = {args.first => args.last} if args.size == 2
+      defs = args.first if args.size == 1
+      defs.each do |id, value|
+        @definitions[id] = LiteralDefinition.new(value)
+      end
     end
   
     def method_missing(msg, *args, &block)

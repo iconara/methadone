@@ -9,11 +9,16 @@ class Worker
   end
   
   def work
-    puts "#{@id} (#{@name}) working in #{@app_name} for #{@manager} (#{object_id})"
+    puts "#{@id} (#{@name}) working in #{@app_name} for #{@manager.name} (#{object_id})"
   end
 end
 
 class Manager
+  attr_reader :name
+  
+  def initialize(name)
+    @name = name
+  end
 end
 
 class Runner
@@ -30,8 +35,9 @@ include Methadone::Dsl
 
 f = factory do
   define :app_name, 'test'
-  register :worker, ::Worker, [app_name, manager, 1, 'Phil']
-  register :manager, ::Manager
+  define :worker_name => 'Phil', :worker_id => 1
+  register :worker, ::Worker, [app_name, manager, worker_id, worker_name]
+  register :manager, ::Manager, ['Sue']
   register :runner, ::Runner, [worker], :type => :prototype
 end
 
