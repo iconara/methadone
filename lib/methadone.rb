@@ -1,0 +1,2 @@
+module Methadone
+end
